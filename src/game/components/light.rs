@@ -4,14 +4,12 @@ use super::*;
 #[derive(Component)]
 pub struct Light {
     pub state: bool,
-    pub input_pin: Pin
 }
 
 impl Light {
     pub fn new() -> Self {
         Self {
             state: false,
-            input_pin: Pin::new()
         }
     }
     

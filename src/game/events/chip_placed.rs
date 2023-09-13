@@ -1,17 +1,20 @@
 use bevy::prelude::*;
-use crate::game::Chip;
+use uuid::Uuid;
+use crate::game::components::ChipType;
 
 #[derive(Event)]
 pub struct ChipPlacedEvent {
-    pub chip: Chip,
-    pub translation: Vec3
+    pub chip_type: ChipType,
+    pub translation: Vec3,
+    pub uuid: Uuid,
 }
 
 impl ChipPlacedEvent {
-    pub fn new(chip: Chip, translation: Vec3) -> Self{
+    pub fn new(chip_type: ChipType, translation: Vec3, uuid: Uuid) -> Self{
         Self {
-            chip,
-            translation
+            chip_type,
+            translation,
+            uuid
         }
     }
 }
