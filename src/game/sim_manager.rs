@@ -27,10 +27,12 @@ pub fn add_logic_gate_to_world(
 ) {
     for place_event in logic_gate_place_event_rx.iter() {
         commands.spawn((
-            ChipRef(place_event.uuid),
+            ChipRef(place_event.chip_ref.clone()),
             SpriteBundle {
                 texture: asset_server.load(match place_event.chip_type {
                     ChipType::GateAnd => "logic gates/AND_gate.png",
+                    ChipType::GateOr => "logic gates/OR_gate.png",
+                    ChipType::GateNot => "logic gates/NOT_gate.png",
                     ChipType::Switch => "misc/Switch_Off.png",
                     ChipType::Light => "misc/Light_Off.png",
                     _ => "logic gates/AND_gate.png"
@@ -50,12 +52,9 @@ pub fn add_logic_gate_to_world(
             On::<Pointer<Click>>::run(|
                 click_event: Listener<Pointer<Click>>,
                 chip_query: Query<&ChipRef>,
-                mut manager_query: Query<&mut SimManager>
             |{
                 let chip_ref = chip_query.get(click_event.target).unwrap();
-                let mut sim_manager = manager_query.single_mut();
-                let chip = sim_manager.chip_map.get_mut(&chip_ref.0).unwrap();
-                chip.lock().unwrap().click();
+                chip_ref.0.lock().unwrap().click();
             })
         ));
     }

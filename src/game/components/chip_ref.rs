@@ -1,5 +1,8 @@
+use std::sync::{Mutex, Arc};
+
 use bevy::prelude::*;
-use uuid::Uuid;
+
+use super::Chip;
 
 #[derive(Component)]
-pub struct ChipRef(pub Uuid);
+pub struct ChipRef(pub Arc<Mutex<Chip>>);

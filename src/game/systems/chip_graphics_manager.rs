@@ -8,32 +8,23 @@ pub fn chip_graphics_manager(
 ) {
     let mut manager = manager_query.single_mut();
     for (mut texture, chip_ref) in chip_query.iter_mut() {
-        match manager.chip_map.get_mut(&chip_ref.0) {
-            Some(chip_ref) => {
-                let chip = chip_ref.lock().unwrap();
-                match chip.chip_type {
-                    ChipType::Switch => {
-                        *texture = if chip.state == ChipState::SwitchOn {
-                            asset_server.load("misc/Switch_On.png")
-                        } else {
-                            asset_server.load("misc/Switch_Off.png")
-                        };
-                    }
-                    ChipType::Light => {
-                        *texture = if chip.state == ChipState::Lit {
-                            asset_server.load("misc/Light_On.png")
-                        } else {
-                            asset_server.load("misc/Light_Off.png")
-                        };
-                    }
-                    _ => (),
-                }
-                
+        let chip = chip_ref.0.lock().unwrap();
+        match chip.chip_type {
+            ChipType::Switch => {
+                *texture = if chip.state == ChipState::SwitchOn {
+                    asset_server.load("misc/Switch_On.png")
+                } else {
+                    asset_server.load("misc/Switch_Off.png")
+                };
             }
-            None => {
-
+            ChipType::Light => {
+                *texture = if chip.state == ChipState::Lit {
+                    asset_server.load("misc/Light_On.png")
+                } else {
+                    asset_server.load("misc/Light_Off.png")
+                };
             }
+            _ => (),
         }
-        
     }
 }

@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use bevy::prelude::*;
+use bevy::{prelude::*, core_pipeline::core_2d::graph::input};
 
 use crate::game::*;
 
@@ -18,6 +18,7 @@ impl Chip {
         let num_inputs = match chip_type {
             ChipType::GateAnd |
             ChipType::GateOr => 2,
+            ChipType::GateNot => 1,
             ChipType::Switch => 0,
             ChipType::Light => 1
         };
@@ -47,6 +48,12 @@ impl Chip {
             }
             ChipType::GateOr => {
                 output = Some(self.input_pins.contains(&true));
+            }
+            ChipType::GateNot => {
+                output = Some(match self.input_pins.get(0) {
+                    Some(input_value) => !input_value, 
+                    None => false
+                });
             }
             ChipType::Light => {
                 self.state = if self.input_pins.contains(&true) {
@@ -88,6 +95,7 @@ pub enum ChipType {
     Light,
     GateAnd,
     GateOr,
+    GateNot,
 }
 
 #[derive(Copy, Clone, PartialEq, Debug)]
